@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinkMate - Your Data Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .neural-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .neural-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239BA3AF' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: movePattern 20s linear infinite;
+        }
+        @keyframes movePattern {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+        .glow {
+            box-shadow: 0 0 15px rgba(66, 153, 225, 0.5);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="neural-bg min-h-screen">
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="glassmorphism fixed w-full z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-blue-400">Think<span class="text-white">Mate</span></span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="themeToggle" class="text-white p-2 rounded-full hover:bg-blue-700 transition">
+                            <i class="bi bi-moon-stars"></i>
+                        </button>
+                        <button id="loginBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="glassmorphism p-8 rounded-xl w-96">
+                <h2 class="text-2xl font-bold text-white mb-6">Login to ThinkMate</h2>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <input type="password" id="loginPassword" placeholder="Password" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                        Login
+                    </button>
+                    <p class="text-center text-slate-400">
+                        Don't have an account? 
+                        <a href="#" id="showSignup" class="text-blue-400 hover:text-blue-300">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signupModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="glassmorphism p-8 rounded-xl w-96">
+                <h2 class="text-2xl font-bold text-white mb-6">Create Account</h2>
+                <form id="signupForm" class="space-y-4">
+                    <div>
+                        <input type="text" id="fullName" placeholder="Full Name" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <input type="email" id="signupEmail" placeholder="Email" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <input type="password" id="signupPassword" placeholder="Password" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                        Sign Up
+                    </button>
+                    <p class="text-center text-slate-400">
+                        Already have an account? 
+                        <a href="#" id="showLogin" class="text-blue-400 hover:text-blue-300">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="pt-20 px-4 sm:px-6 lg:px-8">
+            <!-- Hero Section -->
+            <div class="max-w-7xl mx-auto py-12 sm:py-24">
+                <div class="text-center">
+                    <h1 class="text-4xl sm:text-6xl font-bold text-white mb-8">
+                        Empowering Your Data Decisions with 
+                        <span class="text-blue-400">AI-Powered Insights</span>
+                    </h1>
+                    <p class="text-xl text-slate-300 mb-12">
+                        Transform your data into actionable insights with our advanced AI assistant
+                    </p>
+                    <button id="startAnalyzing" class="bg-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-600 transition glow">
+                        Start Analyzing
+                    </button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="max-w-7xl mx-auto py-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glassmorphism p-6 rounded-xl hover:glow transition cursor-pointer">
+                        <i class="bi bi-magic text-4xl text-blue-400"></i>
+                        <h3 class="text-xl font-semibold text-white mt-4">Data Cleaning</h3>
+                        <p class="text-slate-300 mt-2">Automatically clean and prepare your data for analysis</p>
+                    </div>
+                    <div class="glassmorphism p-6 rounded-xl hover:glow transition cursor-pointer">
+                        <i class="bi bi-graph-up text-4xl text-blue-400"></i>
+                        <h3 class="text-xl font-semibold text-white mt-4">Visualization</h3>
+                        <p class="text-slate-300 mt-2">Create stunning visualizations with a single click</p>
+                    </div>
+                    <div class="glassmorphism p-6 rounded-xl hover:glow transition cursor-pointer">
+                        <i class="bi bi-cpu text-4xl text-blue-400"></i>
+                        <h3 class="text-xl font-semibold text-white mt-4">Machine Learning</h3>
+                        <p class="text-slate-300 mt-2">Leverage AI to uncover hidden patterns in your data</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section (Hidden by default) -->
+            <div id="uploadSection" class="hidden max-w-7xl mx-auto py-12">
+                <div class="glassmorphism p-8 rounded-xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">Upload Dataset</h2>
+                    <div class="border-2 border-dashed border-slate-600 rounded-xl p-8 text-center">
+                        <i class="bi bi-cloud-upload text-6xl text-blue-400"></i>
+                        <p class="text-white mt-4">Drag and drop your files here or</p>
+                        <input type="file" id="fileInput" class="hidden" accept=".csv,.xlsx">
+                        <button onclick="document.getElementById('fileInput').click()" class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                            Browse Files
+                        </button>
+                        <p class="text-slate-400 mt-2">Supported formats: .csv, .xlsx</p>
+                    </div>
+                    <div id="filePreview" class="hidden mt-8">
+                        <h3 class="text-white font-semibold mb-4">File Preview</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-slate-300">
+                                <!-- Preview content will be inserted here -->
+                            </table>
+                        </div>
+                        <button id="proceedToQuery" class="mt-6 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition hidden">
+                            Proceed to Query
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query Section (Hidden by default) -->
+            <div id="querySection" class="hidden max-w-7xl mx-auto py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glassmorphism p-8 rounded-xl">
+                        <h2 class="text-2xl font-bold text-white mb-6">Ask ThinkMate</h2>
+                        <div class="space-y-4">
+                            <select id="queryType" class="w-full p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none">
+                                <option value="cleaning">Data Cleaning</option>
+                                <option value="visualization">Visualization</option>
+                                <option value="eda">Exploratory Data Analysis</option>
+                                <option value="ml">Machine Learning</option>
+                            </select>
+                            <textarea id="queryInput" class="w-full h-32 p-3 rounded-lg bg-slate-800 text-white border border-slate-600 focus:border-blue-500 focus:outline-none" placeholder="What would you like to know about your data?"></textarea>
+                            <button id="submitQuery" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition">
+                                Submit Query
+                            </button>
+                        </div>
+                    </div>
+                    <div class="glassmorphism p-8 rounded-xl">
+                        <h2 class="text-2xl font-bold text-white mb-6">Results</h2>
+                        <div id="loadingSpinner" class="hidden text-center py-12">
+                            <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mx-auto"></div>
+                        </div>
+                        <div id="results" class="space-y-4">
+                            <!-- Results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="glassmorphism mt-12">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-slate-300">
+                    Made with <i class="bi bi-heart-fill text-red-500"></i> by the ThinkMate team — A Smart College Project
+                </p>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <a href="https://github.com" class="text-slate-400 hover:text-white transition">
+                        <i class="bi bi-github text-xl"></i>
+                    </a>
+                    <a href="mailto:contact@thinkmate.ai" class="text-slate-400 hover:text-white transition">
+                        <i class="bi bi-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+        const startAnalyzing = document.getElementById('startAnalyzing');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const proceedToQuery = document.getElementById('proceedToQuery');
+        const querySection = document.getElementById('querySection');
+        
+        // Modal Controls
+        loginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+        showSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.classList.add('hidden');
+            signupModal.classList.remove('hidden');
+        });
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) loginModal.classList.add('hidden');
+            if (e.target === signupModal) signupModal.classList.add('hidden');
+        });
+
+        // Form Submissions
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            // Add login logic here, then hide modal
+            loginModal.classList.add('hidden');
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            // Add signup logic here, then hide modal
+            signupModal.classList.add('hidden');
+        });
+
+        // File Upload Logic
+        startAnalyzing.addEventListener('click', () => {
+            uploadSection.classList.remove('hidden');
+            uploadSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Show preview and proceed button
+                filePreview.classList.remove('hidden');
+                proceedToQuery.classList.remove('hidden');
+                // Add file preview logic here
+            }
+        });
+
+        proceedToQuery.addEventListener('click', () => {
+            querySection.classList.remove('hidden');
+            querySection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Query Submission
+        document.getElementById('submitQuery').addEventListener('click', () => {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const results = document.getElementById('results');
+            const queryInput = document.getElementById('queryInput').value;
+            const queryType = document.getElementById('queryType').value;
+
+            if (queryInput.trim() === '') return;
+
+            loadingSpinner.classList.remove('hidden');
+            results.innerHTML = '';
+
+            // Simulate API call
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+                results.innerHTML = `
+                    <div class="bg-slate-800 p-4 rounded-lg">
+                        <pre class="text-green-400"><code>Python code will appear here...</code></pre>
+                    </div>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Run Code
+                    </button>
+                `;
+            }, 2000);
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        let isDark = true;
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            themeToggle.innerHTML = isDark ? '<i class="bi bi-moon-stars"></i>' : '<i class="bi bi-sun"></i>';
+            // Add theme switching logic here
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
